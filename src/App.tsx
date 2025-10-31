@@ -14,6 +14,10 @@ import {
 } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import dayjs, { type Dayjs } from "dayjs";
+import { Routes, Route } from "react-router-dom";
+import { Navbar } from "./components/NavBar";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
 
 interface Todo {
   id: number;
@@ -91,83 +95,112 @@ export default function App() {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Paper elevation={3} sx={{ p: 4, mt: 5 }}>
-        <Typography variant="h4" component="h1" gutterBottom align="center">
-          Todo List
-        </Typography>
+    <>
+      <Navbar />
+      <Container maxWidth="sm">
+        <Paper elevation={3} sx={{ p: 4, mt: 5 }}>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Paper elevation={3} sx={{ p: 4, mt: 5 }}>
+                  <Typography
+                    variant="h4"
+                    component="h1"
+                    gutterBottom
+                    align="center"
+                  >
+                    Todo List
+                  </Typography>
 
-        <Box sx={{ display: "flex", gap: 2, mb: 2, alignItems: "center" }}>
-          <TextField
-            label="New Todo"
-            variant="outlined"
-            fullWidth
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleAddTodo()}
-          />
-          <Button
-            variant="contained"
-            onClick={handleAddTodo}
-            sx={{ flexShrink: 0 }}
-          >
-            Add
-          </Button>
-        </Box>
-
-        <Stack spacing={2} sx={{ mb: 2 }}>
-          <DateTimePicker
-            label="Optional Due Date"
-            value={dueDate}
-            onChange={(newValue) => setDueDate(newValue)}
-          />
-        </Stack>
-
-        <List>
-          {todos.map((todo) => (
-            <ListItem
-              key={todo.id}
-              sx={{
-                textDecoration: todo.completed ? "line-through" : "none",
-              }}
-            >
-              <Checkbox
-                edge="start"
-                checked={todo.completed}
-                tabIndex={-1}
-                disableRipple
-                onChange={() => handleToggleComplete(todo.id)}
-              />
-              <ListItemText
-                primary={todo.text}
-                secondary={
-                  <Box component="span">
-                    {todo.dueDate && (
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        display="block"
-                      >
-                        Due: {todo.dueDate.format("MM/DD/YYYY h:mm A")}
-                      </Typography>
-                    )}
-                    {todo.completedAt && (
-                      <Typography
-                        variant="caption"
-                        color="text.secondary"
-                        display="block"
-                      >
-                        Completed:{" "}
-                        {todo.completedAt.format("MM/DD/YYYY h:mm A")}
-                      </Typography>
-                    )}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 2,
+                      mb: 2,
+                      alignItems: "center",
+                    }}
+                  >
+                    <TextField
+                      label="New Todo"
+                      variant="outlined"
+                      fullWidth
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyPress={(e) => e.key === "Enter" && handleAddTodo()}
+                    />
+                    <Button
+                      variant="contained"
+                      onClick={handleAddTodo}
+                      sx={{ flexShrink: 0 }}
+                    >
+                      Add
+                    </Button>
                   </Box>
-                }
-              />
-            </ListItem>
-          ))}
-        </List>
-      </Paper>
-    </Container>
+
+                  <Stack spacing={2} sx={{ mb: 2 }}>
+                    <DateTimePicker
+                      label="Optional Due Date"
+                      value={dueDate}
+                      onChange={(newValue) => setDueDate(newValue)}
+                    />
+                  </Stack>
+
+                  <List>
+                    {todos.map((todo) => (
+                      <ListItem
+                        key={todo.id}
+                        sx={{
+                          textDecoration: todo.completed
+                            ? "line-through"
+                            : "none",
+                        }}
+                      >
+                        <Checkbox
+                          edge="start"
+                          checked={todo.completed}
+                          tabIndex={-1}
+                          disableRipple
+                          onChange={() => handleToggleComplete(todo.id)}
+                        />
+                        <ListItemText
+                          primary={todo.text}
+                          secondary={
+                            <Box component="span">
+                              {todo.dueDate && (
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                  display="block"
+                                >
+                                  Due:{" "}
+                                  {todo.dueDate.format("MM/DD/YYYY h:mm A")}
+                                </Typography>
+                              )}
+                              {todo.completedAt && (
+                                <Typography
+                                  variant="caption"
+                                  color="text.secondary"
+                                  display="block"
+                                >
+                                  Completed:{" "}
+                                  {todo.completedAt.format("MM/DD/YYYY h:mm A")}
+                                </Typography>
+                              )}
+                            </Box>
+                          }
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
+                </Paper>
+              }
+            />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </Paper>
+      </Container>
+    </>
   );
 }
