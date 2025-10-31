@@ -35,22 +35,17 @@ A simple and intuitive Todo list application built with React, TypeScript, and M
     git clone <your-repo-url>
     cd react-todo-list-localstorage
     ```
-2.  Build the Docker image
+2.  Start or recreate all services defined in your docker-compose.yml file
     ```sh
-    docker build -t react-todo-list-localstorage .
+    docker-compose up -d --build 
     ```
-3.  Create and start a new container based on the Docker image
-    ```sh
-    docker run -p 5173:5173 react-todo-list-localstorage
-    ```
-    The application will be accessible in your browser, typically at `http://localhost:5173`.
+    The application will be accessible in your browser, typically at `http://localhost:8000`.
 
 ## Project Structure
 
-- `src/App.tsx`: The main application component, handling the application's state, data persistence via `localStorage`, and defining the application's routing. It contains the logic for the todo list and form.
+- `src/App.tsx`: The main application component, handling the application's state, data persistence via `localStorage`, and defining the application's routing. It contains the content for the main Todo list page.
 - `src/main.tsx`: The application's entry point, where the necessary providers (`LocalizationProvider`, `BrowserRouter`, `ThemeProvider`) are set up.
 - `src/components/Navbar.tsx`: A reusable navigation component that appears on all pages.
-- `src/pages/HomePage.tsx`: The content for the main Todo list page.
 - `src/pages/AboutPage.tsx`: A simple "About" page.
 - `src/pages/ContactPage.tsx`: A simple "Contact" page.
 
