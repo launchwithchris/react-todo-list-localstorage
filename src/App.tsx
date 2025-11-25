@@ -22,6 +22,7 @@ import Contact from "./pages/Contact";
 interface Todo {
   id: number;
   text: string;
+  description: string;
   completed: boolean;
   dueDate: Dayjs | null;
   completedAt: Dayjs | null;
@@ -45,6 +46,8 @@ export default function App() {
   });
 
   const [inputValue, setInputValue] = useState<string>("");
+  const [inputDescriptionValue, setInputDescriptionValue] =
+    useState<string>("");
   const [dueDate, setDueDate] = useState<Dayjs | null>(null);
 
   // Sync state with localStorage whenever todos change
@@ -52,7 +55,7 @@ export default function App() {
     localStorage.setItem(
       LOCAL_STORAGE_KEY,
       JSON.stringify(
-        todos.map((todo) => ({
+        todos.map((todo: Todo) => ({
           ...todo,
           dueDate: todo.dueDate ? todo.dueDate.toISOString() : null,
           completedAt: todo.completedAt ? todo.completedAt.toISOString() : null,
@@ -68,19 +71,21 @@ export default function App() {
         {
           id: Date.now(),
           text: inputValue,
+          description: inputDescriptionValue,
           completed: false,
           dueDate: dueDate,
           completedAt: null,
         },
       ]);
       setInputValue("");
+      setInputDescriptionValue("");
       setDueDate(null);
     }
   };
 
   const handleToggleComplete = (id: number) => {
     setTodos(
-      todos.map((todo) => {
+      todos.map((todo: Todo) => {
         if (todo.id === id) {
           const newCompletedStatus = !todo.completed;
           return {
@@ -127,7 +132,12 @@ export default function App() {
                       fullWidth
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
-                      onKeyPress={(e) => e.key === "Enter" && handleAddTodo()}
+                      onKeyPress={(e) =>
+                        e.key === "Enter" &&
+                        inputValue &&
+                        inputDescriptionValue &&
+                        handleAddTodo()
+                      }
                     />
                     <Button
                       variant="contained"
@@ -137,7 +147,21 @@ export default function App() {
                       Add
                     </Button>
                   </Box>
-
+                  <Stack spacing={2} sx={{ mb: 2 }}>
+                    <TextField
+                      label="Description"
+                      variant="outlined"
+                      fullWidth
+                      value={inputDescriptionValue}
+                      onChange={(e) => setInputDescriptionValue(e.target.value)}
+                      onKeyPress={(e) =>
+                        e.key === "Enter" &&
+                        inputValue &&
+                        inputDescriptionValue &&
+                        handleAddTodo()
+                      }
+                    />
+                  </Stack>
                   <Stack spacing={2} sx={{ mb: 2 }}>
                     <DateTimePicker
                       label="Optional Due Date"
@@ -147,7 +171,7 @@ export default function App() {
                   </Stack>
 
                   <List>
-                    {todos.map((todo) => (
+                    {todos.map((todo: Todo) => (
                       <ListItem
                         key={todo.id}
                         sx={{
@@ -164,7 +188,11 @@ export default function App() {
                           onChange={() => handleToggleComplete(todo.id)}
                         />
                         <ListItemText
-                          primary={todo.text}
+                          primary={
+                            todo.description && todo.description.length > 0
+                              ? todo.text + "(" + todo.description + ")"
+                              : todo.text
+                          }
                           secondary={
                             <Box component="span">
                               {todo.dueDate && (
